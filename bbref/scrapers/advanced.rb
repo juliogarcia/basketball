@@ -11,7 +11,7 @@ agent.user_agent = 'Mozilla/5.0'
 
 base = "http://www.basketball-reference.com/leagues"
 
-table_xpath = '//*[@id="advanced"]/tbody/tr'
+table_xpath = '//*[@id="advanced_stats"]/tbody/tr'
 
 first_year = 2016
 last_year = 2016
@@ -24,7 +24,7 @@ end
 
 (first_year..last_year).each do |year|
 
-  url = "#{base}/NBA_#{year}_advanced_stats.html"
+  url = "#{base}/NBA_#{year}_advanced.html"
   print "Pulling year #{year}"
 
   begin
