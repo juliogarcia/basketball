@@ -5,6 +5,7 @@ bad = " "
 
 require "csv"
 require "mechanize"
+require 'nokogiri'
 
 agent = Mechanize.new{ |agent| agent.history.max_size=0 }
 agent.user_agent = 'Mozilla/5.0'
@@ -13,8 +14,8 @@ base = "http://www.basketball-reference.com/leagues"
 #http://www.basketball-reference.com/leagues/NBA_2016.html
 tl_base = "http://www.basketball-reference.com/teams"
 
-table_xpath = '//*[@id="team"]/tbody/tr/td/a'
-tl_xpath = '//*[@id="stats"]/tbody/tr'
+table_xpath = '//*[@id="all_team_stats"]/comment()'
+tl_xpath = '//*[@id="tgl_basic"]/tbody/tr'
 
 first_year = 2016
 last_year = 2016
@@ -36,10 +37,23 @@ end
     retry
   end
 
+  comment_start = '<!--'
+  comment_end = '-->'
+
+  table_str = page.parser.xpath(table_xpath)
+  table_str = table_str.to_s
+  table_str = table_str.split(/#{comment_start}(.*?)#{comment_end}/m)[1]
+
+  doc = Nokogiri::HTML(table_str, 'UTF-8')
+  node = doc.xpath('//*[@id="team_stats"]/tbody/tr/td/a')
+
   teams = []
-  page.parser.xpath(table_xpath).each do |team|
+  node.each do |team|
     teams << team["href"].split("/")[2]
   end
+  # page.parser.xpath(table_xpath).each do |team|
+    # teams << team["href"].split("/")[2]
+  # end
 
   print " - found #{teams.size} teams\n"
 

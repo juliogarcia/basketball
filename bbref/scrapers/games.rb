@@ -11,7 +11,7 @@ agent.user_agent = 'Mozilla/5.0'
 
 base = "http://www.basketball-reference.com/leagues"
 
-table_xpath = '//*[@id="games"]/tbody/tr'
+table_xpath = '//*[@id="schedule"]/tbody/tr'
 
 #league_id = "ABA"
 
@@ -29,9 +29,9 @@ last_year = 2016
 (first_year..last_year).each do |year|
 
 #  stats = CSV.open("csv/games_#{league_id}_#{year}.csv","w")
-   stats = CSV.open("csv/games_#{year}.csv","w")
+   stats = CSV.open("csv/games_#{year}.csv","ab")
 
-  url = "#{base}/#{league_id}_#{year}_games.html"
+  url = "#{base}/#{league_id}_#{year}_games-june.html"
   print "Pulling year #{year}"
 
   begin
